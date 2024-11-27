@@ -6,6 +6,7 @@ import json
 
 import requests as req
 from bs4 import BeautifulSoup
+from tqdm import tqdm
 
 
 class OnionError(Exception):
@@ -55,7 +56,7 @@ def get_articles_from_page(url: str) -> list[dict]:
 if __name__ == "__main__":
 
     all_articles = []
-    for i in range(1, 10):
+    for i in tqdm(range(1, 10)):
         all_articles.extend(get_articles_from_page(f"https://theonion.com/news/page/{i}/"))
 
     with open("onion_articles.json", "w") as f:
