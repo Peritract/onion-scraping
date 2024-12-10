@@ -1,6 +1,5 @@
 """A script that scrapes data from the Onion website."""
 
-from datetime import datetime
 from time import sleep
 import json
 
@@ -11,17 +10,16 @@ from tqdm import tqdm
 
 class OnionError(Exception):
     """Errors accessing the Onion site."""
-    pass
 
 
 def get_article_details(url: str) -> dict:
     """Returns a dict of Onion article data."""
-    
-    result = req.get(url)
+
+    result = req.get(url, timeout=5)
 
     if result.status_code >= 400:
         raise OnionError("Could not access URL successfully.")
-    
+
     onion_soup = BeautifulSoup(result.text, features="html.parser")
 
     tag_holder = onion_soup.find("div", class_="taxonomy-post_tag")
@@ -39,12 +37,12 @@ def get_article_details(url: str) -> dict:
 
 def get_articles_from_page(url: str) -> list[dict]:
     """Returns a list of all article details on the page."""
-    
-    result = req.get(url)
+
+    result = req.get(url, timeout=5)
 
     if result.status_code >= 400:
         raise OnionError("Could not access URL successfully.")
-    
+
     onion_soup = BeautifulSoup(result.text, features="html.parser")
 
     links = onion_soup.find_all("h3")
@@ -61,6 +59,7 @@ if __name__ == "__main__":
     all_articles = []
     for i in tqdm(range(1, 5)):
         all_articles.extend(get_articles_from_page(f"https://theonion.com/news/page/{i}/"))
+        sleep(1)
 
-    with open("onion_articles.json", "w") as f:
+    with open("onion_articles.json", "w", encoding="utf-8") as f:
         json.dump(all_articles, f, indent=4)
