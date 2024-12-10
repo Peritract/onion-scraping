@@ -50,6 +50,7 @@ def get_articles_from_page(url: str) -> list[dict]:
     articles = []
     for l in links:
         articles.append(get_article_details(l.find("a")["href"]))
+        sleep(1)
 
     return articles
 
@@ -57,9 +58,9 @@ def get_articles_from_page(url: str) -> list[dict]:
 if __name__ == "__main__":
 
     all_articles = []
-    for i in tqdm(range(1, 5)):
+    for i in tqdm(range(1, 10)):
         all_articles.extend(get_articles_from_page(f"https://theonion.com/news/page/{i}/"))
         sleep(1)
-
+        
     with open("onion_articles.json", "w", encoding="utf-8") as f:
         json.dump(all_articles, f, indent=4)
