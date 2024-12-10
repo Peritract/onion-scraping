@@ -26,10 +26,14 @@ def get_article_details(url: str) -> dict:
 
     tag_holder = onion_soup.find("div", class_="taxonomy-post_tag")
     tags = tag_holder.find_all("a") if tag_holder else []
+    content = onion_soup.find("div", class_="single-post-content")
+    paragraphs = content.find_all("p") if content else []
     return {
         "title": onion_soup.find("h1").get_text(),
-        "published": onion_soup.find("time")["datetime"], # datetime.fromisoformat(onion_soup.find("time")["datetime"]),
-        "tags": [tag.get_text() for tag in tags]
+        "url": url,
+        "published": onion_soup.find("time")["datetime"],
+        "tags": [tag.get_text() for tag in tags],
+        "text": [p.get_text() for p in paragraphs]
     }
 
 
@@ -47,7 +51,6 @@ def get_articles_from_page(url: str) -> list[dict]:
 
     articles = []
     for l in links:
-        sleep(1)
         articles.append(get_article_details(l.find("a")["href"]))
 
     return articles
@@ -56,7 +59,7 @@ def get_articles_from_page(url: str) -> list[dict]:
 if __name__ == "__main__":
 
     all_articles = []
-    for i in tqdm(range(1, 10)):
+    for i in tqdm(range(1, 5)):
         all_articles.extend(get_articles_from_page(f"https://theonion.com/news/page/{i}/"))
 
     with open("onion_articles.json", "w") as f:
