@@ -5,3 +5,5 @@ venv
 .DS_Store
 *.csv
 *.json
+*.terraform*
+terraform.tfvars
