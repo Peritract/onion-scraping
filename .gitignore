@@ -7,3 +7,4 @@ venv
 *.json
 *.terraform*
 terraform.tfvars
+*.tfstate.*
