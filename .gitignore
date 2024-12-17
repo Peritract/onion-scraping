@@ -8,3 +8,5 @@ venv
 *.terraform*
 terraform.tfvars
 *.tfstate.*
+*.zip
+temp

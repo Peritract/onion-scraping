@@ -5,3 +5,8 @@ variable "DB_USERNAME" {
 variable "DB_PASSWORD" {
     type = string
 }
+
+variable "LOCATION" {
+    type = string
+    default = "UK South"
+}
